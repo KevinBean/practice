@@ -31,3 +31,17 @@ python练习项目
 14. 敏感词文本文件 filtered_words.txt，里面的内容 和 0011题一样，当用户输入敏感词语，则用 星号 * 替换，例如当用户输入「北京是个好城市」，则变成「**是个好城市」。
 
 15. 用 Python 写一个爬图片的程序，爬 这个链接里的日本妹子图片 :-) http://tieba.baidu.com/p/2166231880
+
+16. 纯文本文件 student.txt为学生信息,请将上述内容写到 student.xls 文件中
+
+17. 纯文本文件 city.txt为城市信息,请将上述内容写到 city.xls 文件中  __跳过__
+
+18. 纯文本文件 numbers.txt, 请将上述内容写到 numbers.xls 文件中 __跳过__
+
+19. 将 第 0014 题中的 student.xls 文件中的内容写到 student.xml 文件中
+
+20. 将 第 0015 题中的 city.xls 文件中的内容写到 city.xml 文件中
+
+21. 将 第 0016 题中的 numbers.xls 文件中的内容写到 numbers.xml 文件中
+
+22. 写代码，对每月通话时间做个统计。
