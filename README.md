@@ -38,10 +38,12 @@ python练习项目
 
 18. 纯文本文件 numbers.txt, 请将上述内容写到 numbers.xls 文件中 __跳过__
 
-19. 将 第 0014 题中的 student.xls 文件中的内容写到 student.xml 文件中
+19. 将 第 0014 题中的 student.xls 文件中的内容写到 student.xml 文件中 __跳过__
 
-20. 将 第 0015 题中的 city.xls 文件中的内容写到 city.xml 文件中
+20. 将 第 0015 题中的 city.xls 文件中的内容写到 city.xml 文件中 __跳过__
 
-21. 将 第 0016 题中的 numbers.xls 文件中的内容写到 numbers.xml 文件中
+21. 将 第 0016 题中的 numbers.xls 文件中的内容写到 numbers.xml 文件中 __跳过__
 
-22. 写代码，对每月通话时间做个统计。
+22. 写代码，对每月通话时间做个统计。 __跳过__
+
+23. 绘制矢量图。
