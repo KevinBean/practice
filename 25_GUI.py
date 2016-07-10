@@ -39,7 +39,7 @@ frame_right_bottom  = Frame(width=80, height=30)
 
 ##创建需要的几个元素
 text_msglist    = Text(frame_top)
-text_msg      = Entry(frame_left_bottom);
+text_msg      = Entry(frame_left_bottom)
 button_sendmsg   = Button(frame_right_bottom, text=unicode('发送','utf-8'), command=sendmessage)
 
 #创建一个绿色的tag
