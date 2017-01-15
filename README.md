@@ -53,3 +53,5 @@ python练习项目
 25. GUI开发。 使用TKinter
 
 26. Todolist __跳过__
+
+27. whoosh 搜索引擎
