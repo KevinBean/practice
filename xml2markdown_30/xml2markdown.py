@@ -6,6 +6,7 @@ xmlns会加到解析名之前。
 from xml.dom import minidom
 import xml.etree.ElementTree as Et
 import os
+from re import findall
 
 filename = '00B32824B26ABA2D4825809F0021C41D.xml'
 if os.name == 'nt':
@@ -38,8 +39,39 @@ sub-branch {'name': 'subrelease01'}
 ...
 branch {'hash': 'f200013e', 'name': 'release01'}
 '''
-for elem in root.iterfind(xmlns + 'item[@name="Subject"]'):
-    print elem.tag, elem.attrib, elem[0].text
+
+def xmlfind(item, name):
+    key = xmlns + item +'[@name="' + name +'"]'
+    for elem in root.iterfind(key):
+        return elem[0].text
+
+# 邮件标题
+subject = xmlfind('item', 'Subject')
+# 邮件发送人
+author = xmlfind('item', 'yszz_d')
+# 是否转发
+if xmlfind('item', 'ForwardFlag') !='':
+    forwardflag = True
+# 收件人
+tosomeone = xmlfind('item', 'wdSendToPersonName')
+# 是否有附件，附件文件名
+if xmlfind('item','WDAPATTACHMENTINFO') !='':
+    attachflag = True
+    attach = findall(pattern=ur"<文件名>(.*)</文件名>", string= xmlfind('item','WDAPATTACHMENTINFO'))
+    attachfiles = attach[0].split('|')
+print xmlfind('item', 'wbnr')
+print subject, author, forwardflag, tosomeone, attachflag, attachfiles[0].encode('utf-8'), xmlfind('item','WDAPATTACHMENTINFO')
+
+mdfile = 'Title: My super title \n' \
+         'Date: 2010-12-03 10:20 \n' \
+         'Modified: 2010-12-05 19:30 \n' \
+         'Category: Python \n' \
+         ' Tags: pelican, publishing \n' \
+         'Slug: my-super-post \n' \
+         'Authors: Alexis Metaireau, Conan Doyle \n' \
+         'Summary: Short version for index and feeds \n' \
+         ' This is the content of my super blog post.'
+
 
 '''使用xml.dom.minidom
 def get_nodevalue(node , index = 0):

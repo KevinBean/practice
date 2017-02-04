@@ -19,3 +19,5 @@
 附件文件名
 ## <item name="WDEXPORTEDFILESINFO">
 附件文件名，同WDAPATTACHMENTINFO
+## <item name='wdCreated'><datetime>20170105T140848,93+08</datetime></item>
+发送时间
