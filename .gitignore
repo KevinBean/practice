@@ -32,3 +32,11 @@ xml2markdown_30/md/261DF9A44B7E8B7648258099001D49BD.md
 xml2markdown_30/xml/00B32824B26ABA2D4825809F0021C41D.xml
 
 xml2markdown_30/xml/261DF9A44B7E8B7648258099001D49BD.xml
+
+xml2markdown_30/xml/*.xml
+
+xml2markdown_30/md/*.md
+
+xml2markdown_30/xml/*/*/*.*
+
+
