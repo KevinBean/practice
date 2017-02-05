@@ -20,7 +20,6 @@ except ImportError:
 
 tree = Et.parse(filename)
 root = tree.getroot()
-print root.tag, root.attrib
 xmlns = '{'+'http://www.lotus.com/dxl'+'}'
 
 
@@ -40,38 +39,63 @@ sub-branch {'name': 'subrelease01'}
 branch {'hash': 'f200013e', 'name': 'release01'}
 '''
 
-def xmlfind(item, name):
-    key = xmlns + item +'[@name="' + name +'"]'
-    for elem in root.iterfind(key):
-        return elem[0].text
+def xmlfind(item, name = '', node = root):
+    if name != '':
+        key = xmlns + item + '[@name="' + name + '"]'
+    else:
+        key = xmlns + item
+    for elem in node.iterfind(key):
+        return elem
 
 # 邮件标题
-subject = xmlfind('item', 'Subject')
+subjectNode = xmlfind('item', 'Subject')
+subject = subjectNode[0].text
 # 邮件发送人
-author = xmlfind('item', 'yszz_d')
+authorNode = xmlfind('item', 'yszz_d')
+author = authorNode[0].text
 # 是否转发
-if xmlfind('item', 'ForwardFlag') !='':
-    forwardflag = True
+forwardflagNode = xmlfind('item', 'ForwardFlag')
+if forwardflagNode[0].text != '':
+    isforward = True
 # 收件人
-tosomeone = xmlfind('item', 'wdSendToPersonName')
+tosomeoneNode = xmlfind('item', 'wdSendToPersonName')
+tosomeone = tosomeoneNode[0].text
 # 是否有附件，附件文件名
-if xmlfind('item','WDAPATTACHMENTINFO') !='':
-    attachflag = True
-    attach = findall(pattern=ur"<文件名>(.*)</文件名>", string= xmlfind('item','WDAPATTACHMENTINFO'))
+attachNode = xmlfind('item', 'WDAPATTACHMENTINFO')
+if attachNode[0].text != '':
+    hasattach = True
+    attach = findall(pattern=ur"<文件名>(.*)</文件名>", string= attachNode[0].text)
     attachfiles = attach[0].split('|')
-print xmlfind('item', 'wbnr')
-print subject, author, forwardflag, tosomeone, attachflag, attachfiles[0].encode('utf-8'), xmlfind('item','WDAPATTACHMENTINFO')
+# 发送的邮件内容
+contentsendNode = xmlfind('item', 'wbnr')
+contentsend = ''
+# 定位到item下richtext下的par，提取text
+if contentsendNode[0][0].text:
+    contentsend += contentsendNode[0][0].text + '\n'
+print contentsend
+# 定位到item下richtext下的par下的break，提取tail
+for breakNode in contentsendNode[0][0]:
+    contentsend += breakNode.tail + '\n'
+print contentsend, '1'
+breakNode = xmlfind('break', '', node=contentsendNode[0])
+print subjectNode[0].tag, subjectNode[0].text, '2'
+# print breakNode[0].tag, breakNode[0].text, '3'
+print subject, author, isforward, tosomeone, hasattach, attachfiles[0].encode('utf-8'), xmlfind('item','WDAPATTACHMENTINFO')
 
-mdfile = 'Title: My super title \n' \
-         'Date: 2010-12-03 10:20 \n' \
-         'Modified: 2010-12-05 19:30 \n' \
-         'Category: Python \n' \
-         ' Tags: pelican, publishing \n' \
-         'Slug: my-super-post \n' \
-         'Authors: Alexis Metaireau, Conan Doyle \n' \
-         'Summary: Short version for index and feeds \n' \
-         ' This is the content of my super blog post.'
-
+mdfile = '--- \n title: {0} \n' \
+         'date: {1} \n' \
+         'category: {2} \n' \
+         'tags: {3} \n' \
+         'summary: {4} \n' \
+         'authors: {5} \n --- \n' \
+         ' {4} \n {6}'\
+    .format(subject[:min(32, len(subject))].encode('utf-8'),
+            '2010-12-03 10:20', 'OA', '已发送', subject.encode('utf-8'),
+            author.encode('utf-8'), contentsend.encode('utf-8'))
+print mdfile
+with open('test.md', 'w') as fd:
+    fd.write(mdfile)
+    fd.close()
 
 '''使用xml.dom.minidom
 def get_nodevalue(node , index = 0):
