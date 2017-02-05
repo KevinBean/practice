@@ -23,11 +23,12 @@ def xmlfind(tag, node, name=''):
 
 def readnode(node):
     text = ''
-    for item in node.iter():
-        if item.text:
-            text += item.text
-        if item.tail:
-            text += item.tail
+    if node is not None:
+        for item in node.iter():
+            if item.text:
+                text += item.text
+            if item.tail:
+                text += item.tail
     return text
 
 def xml2md(filename):
@@ -109,8 +110,11 @@ def xml2md(filename):
 
     # 是否有附件，附件文件名
     attachNode = xmlfind('item', root, 'WDAPATTACHMENTINFO')
-    if attachNode[0].text != '':
+    attachfiles = []
+    hasattach = False
+    if attachNode[0].text is not None:
         hasattach = True
+        print attachNode[0].text
         attach = findall(pattern=ur"<文件名>(.*)</文件名>", string=attachNode[0].text)
         attachfiles = attach[0].split('|')
     attachhtml = '<br> 附件： <br>'
@@ -123,7 +127,8 @@ def xml2md(filename):
 
     # 发送的邮件内容，暂时无用
     contentsendNode = xmlfind('item', root, 'wbnr')
-    contentsend = u''
+    contentsend = readnode(contentsendNode)
+    '''
     if contentsendNode is not None:
         # 定位到item下richtext下的par，提取text
         if contentsendNode[0][0].text:
@@ -133,9 +138,12 @@ def xml2md(filename):
         for breakNode in contentsendNode[0][0]:
             contentsend += breakNode.tail + '\n'
         print contentsend, '1'
+    '''
 
     # 发送的邮件内容html
     contentsendhtmlNode = xmlfind('item', root, 'htmlnr1')
+    contentsendhtml = readnode(contentsendhtmlNode)
+    '''
     contentsendhtml = u''
     if contentsendhtmlNode is not None:
         for item in contentsendhtmlNode.iter():
@@ -144,22 +152,21 @@ def xml2md(filename):
             if item.tail:
                 contentsendhtml += item.tail
         print contentsendhtml
+    '''
 
 
-    print subject, author, isforward, tosomeone, hasattach, attachfiles[0].encode('utf-8'), xmlfind('item', root,
-                                                                                                    'WDAPATTACHMENTINFO')
-
-    mdfile = '--- \n title: {0} \n' \
-             'date: {1} \n' \
-             'category: {2} \n' \
-             'tags: {3} \n' \
-             'summary: {4} \n' \
-             'authors: {5} \n --- \n' \
+    mdfile = '--- \n Title: {0} \n' \
+             'Slug: id-{9} \n' \
+             'Date: {1} \n' \
+             'Category: {2} \n' \
+             'Tags: {3} \n' \
+             'Summary: {4} \n' \
+             'Authors: {5} \n --- \n' \
              ' {4} \n {8} {6} {7}' \
         .format(subject[:min(32, len(subject))].encode('utf-8'),
                 date, category, tags, subject.encode('utf-8'),
                 author.encode('utf-8'), contentsendhtml.encode('utf-8'),
-                contentreceivehtml.encode('utf-8'), attachhtml)
+                contentreceivehtml.encode('utf-8'), attachhtml, idxml)
     print mdfile
     if os.path.exists('md'):
         pass
